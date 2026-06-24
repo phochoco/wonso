@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="118개 원소를 한눈에! 생동감 있는 3D 원자 모델, 한글 백과사전, 그리고 아름다운 스펙트럼 이미지가 담긴 완벽한 원소주기율표입니다.">
+  <meta name="keywords" content="원소주기율표, 화학, 원자, 3D, 과학, 화학원소, Periodic Table, Chemistry">
+  <meta name="author" content="Periodic Table Explorer">
+  <meta name="theme-color" content="#0a1220">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://periodic-table-explorer.vercel.app/">
+  <meta property="og:title" content="인터랙티브 3D 원소주기율표">
+  <meta property="og:description" content="118개 원소를 3D로 탐험하세요! 상세한 한글 설명과 실생활 쓰임새까지 한곳에.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1603126852329-847e3ab88ce4?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://periodic-table-explorer.vercel.app/">
+  <meta property="twitter:title" content="인터랙티브 3D 원소주기율표">
+  <meta property="twitter:description" content="118개 원소를 3D로 탐험하세요! 상세한 한글 설명과 실생활 쓰임새까지 한곳에.">
+  <meta property="twitter:image" content="https://images.unsplash.com/photo-1603126852329-847e3ab88ce4?auto=format&fit=crop&w=1200&q=80">
+
+  <title>인터랙티브 3D 원소주기율표 | Periodic Table</title>
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="title-block">
+        <div class="atom-icon">⚛</div>
+        <div>
+          <h1 class="main-title">원소주기율표</h1>
+          <p class="sub-title">Periodic Table of Elements · 118 Elements</p>
+        </div>
+      </div>
+      <div class="header-controls">
+        <div class="view-toggles">
+          <button id="view-grid-btn" class="view-btn active" style="display:flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            그리드
+          </button>
+          <button id="view-list-btn" class="view-btn" style="display:flex; align-items:center; gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            리스트
+          </button>
+        </div>
+        <div class="compare-toggle">
+          <label class="switch">
+            <input type="checkbox" id="compare-mode-toggle">
+            <span class="slider round"></span>
+          </label>
+          <span class="compare-label">비교 모드</span>
+        </div>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="원소 검색 (이름·기호·번호)">
+          <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+        </div>
+        <div class="stats">
+          <span class="stat-chip">⚛️ 118 원소</span>
+          <span class="stat-chip">🧪 10 분류</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Filter Bar -->
+    <div class="filter-bar" id="filterBar">
+      <button class="fb active" data-cat="all" onclick="setFilter('all',this)">전체 All</button>
+      <button class="fb alkali-metal" data-cat="alkali-metal" onclick="setFilter('alkali-metal',this)">알칼리 금속</button>
+      <button class="fb alkaline-earth" data-cat="alkaline-earth" onclick="setFilter('alkaline-earth',this)">알칼리 토금속</button>
+      <button class="fb transition-metal" data-cat="transition-metal" onclick="setFilter('transition-metal',this)">전이 금속</button>
+      <button class="fb post-transition" data-cat="post-transition" onclick="setFilter('post-transition',this)">전이 후 금속</button>
+      <button class="fb metalloid" data-cat="metalloid" onclick="setFilter('metalloid',this)">준금속</button>
+      <button class="fb nonmetal" data-cat="nonmetal" onclick="setFilter('nonmetal',this)">비금속</button>
+      <button class="fb halogen" data-cat="halogen" onclick="setFilter('halogen',this)">할로겐</button>
+      <button class="fb noble-gas" data-cat="noble-gas" onclick="setFilter('noble-gas',this)">비활성 기체</button>
+      <button class="fb lanthanide" data-cat="lanthanide" onclick="setFilter('lanthanide',this)">란타넘족</button>
+      <button class="fb actinide" data-cat="actinide" onclick="setFilter('actinide',this)">악티늄족</button>
+    </div>
+
+    <!-- Periodic Table Wrapper -->
+    <div class="table-scroll">
+      <div class="table-wrap">
+        <!-- Temperature Control Panel -->
+        <div class="temp-control-panel">
+          <div class="temp-info">
+            <span class="temp-icon">🌡️</span>
+            <span class="temp-label">온도 (Temperature)</span>
+            <span class="temp-val"><strong id="temp-k-val">298</strong> K (<span id="temp-c-val">25</span> °C)</span>
+          </div>
+          <input type="range" id="temp-slider" min="0" max="6000" step="1" value="298">
+        </div>
+        <!-- Group number labels 1-18 -->
+        <div class="group-row" id="groupRow"></div>
+        <!-- Period labels + main grid -->
+        <div class="grid-area">
+          <div class="period-col" id="periodCol"></div>
+          <div class="ptable" id="ptable"></div>
+        </div>
+        <!-- F-block separator -->
+        <div class="fblock-gap">
+          <div class="fblock-indicator">
+            <span class="fblock-line lanthanide-line"></span>
+            <span class="fblock-text">란타넘족 Lanthanides (57–71)</span>
+          </div>
+          <div class="fblock-indicator">
+            <span class="fblock-line actinide-line"></span>
+            <span class="fblock-text">악티늄족 Actinides (89–103)</span>
+          </div>
+        </div>
+        <!-- F-block grid -->
+        <div class="fblock-grid" id="fblockGrid"></div>
+      </div>
+    </div>
+
+    <!-- List View Wrapper (Hidden by default) -->
+    <div class="list-view-container" id="listViewContainer" style="display: none;">
+      <table class="el-table">
+        <thead>
+          <tr>
+            <th data-sort="num">번호 ↕</th>
+            <th data-sort="sym">기호 ↕</th>
+            <th data-sort="nameKr">이름 ↕</th>
+            <th data-sort="cat">분류 ↕</th>
+            <th data-sort="mass">원자량 ↕</th>
+            <th data-sort="melt">녹는점 ↕</th>
+            <th data-sort="boil">끓는점 ↕</th>
+            <th data-sort="density">밀도 ↕</th>
+          </tr>
+        </thead>
+        <tbody id="listTbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend" id="legend"></div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <!-- Single Element Modal -->
+    <div class="modal-box" id="modalBox">
+      <button class="modal-close-btn" onclick="closeModal()">✕</button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+    
+    <!-- Compare Mode Modal -->
+    <div class="modal-box compare-box" id="compareModalBox" style="display: none; max-width: 900px;">
+      <button class="modal-close-btn" onclick="closeModal()">✕</button>
+      <div class="compare-container" id="compareContainer"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="elements_data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

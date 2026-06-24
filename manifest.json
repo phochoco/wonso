@@ -1,0 +1,24 @@
+{
+  "name": "인터랙티브 3D 원소주기율표",
+  "short_name": "원소주기율표",
+  "description": "118개 원소를 3D로 탐험하세요! 상세한 한글 설명과 실생활 쓰임새까지 한곳에 담긴 완벽한 원소주기율표.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a1220",
+  "theme_color": "#0a1220",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
